@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drag and Drop Ball</title>
+    <style>
+        * {
+
+
+
+           
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: black;
+        }
+
+        .box {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 50vw;
+            height: 90vh;
+            border: 2px solid white;
+        }
+
+        .ball {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            background: blue;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <div class="ball"></div>
+    </div>
+
+    <script>
+        const ball = document.querySelector(".ball");
+        let isDragging = false;
+
+        function getRandomColor(){
+            const letters='0123456789ABCDEF'
+            let color='#'
+            for(let i =0;i<6;i++){
+                color+=letters[Math.floor(Math.random()*16)];
+            }
+            return color;
+        }
+
+        // When the ball is clicked, start dragging
+        ball.addEventListener("mousedown", () => {
+            isDragging = true;
+            ball.style.background=getRandomColor();
+        });
+
+        // When the mouse moves, update the ball's position
+        document.addEventListener("mousemove", (e) => {
+            if (isDragging) {
+                const box = document.querySelector(".box").getBoundingClientRect();
+                let x = e.clientX - box.left - ball.offsetWidth / 2;
+                let y = e.clientY - box.top - ball.offsetHeight / 2;
+
+                // Keep the ball inside the box
+                x = Math.max(0, Math.min(x, box.width - ball.offsetWidth));
+                y = Math.max(0, Math.min(y, box.height - ball.offsetHeight));
+
+                ball.style.left = x + "px";
+                ball.style.top = y + "px";
+            }
+        });
+
+        // When the mouse button is released, stop dragging
+        document.addEventListener("mouseup", () => {
+            isDragging = false;
+        });
+    </script>
+</body>
+</html>
+
